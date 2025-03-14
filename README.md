@@ -22,7 +22,7 @@
 ## 🛠️ Tech Stack
 - **Frontend:** Next.js, React, Tailwind CSS
 - **Backend:** Node.js
-- **Database:** Postgres
+- **Database:** PostgreSQL
 - **Authentication:** Clerk
 - **Hosting:** Vercel
 
