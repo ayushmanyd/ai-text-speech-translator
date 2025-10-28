@@ -4,7 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEN_AI_API_KEY);
 
 async function translateText(inputText, targetLanguage) {
-  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   const prompt = `Detect the language of the text and translate it into ${targetLanguage}: ${inputText}`;
   const additionalPrompt =
     "Just return the translated text. Do not add additional descriptions such as `Here are the translations`";
