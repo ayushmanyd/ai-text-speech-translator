@@ -5,7 +5,6 @@ import TranslateButton from "@/components/Button/TranslateButton";
 import Dropdown from "@/components/Dropdown/Dropdown";
 import TextArea from "@/components/TextArea/TextArea";
 import languages from "@/components/Dropdown/Languages";
-import translate from "@/app/actions/or-translate";
 // import { translate } from "@/app/actions/translate";
 import AILangRecognition from "@/components/ui/AILangRecognition";
 import VoiceRecorder from "@/components/Voice/VoiceRecorder";
@@ -13,6 +12,7 @@ import { CircleCheck, Copy } from "lucide-react";
 import CopyButton from "@/components/Button/CopyButton";
 import SaveButton from "@/components/Button/SaveButton";
 import { motion } from "framer-motion";
+import translate from "@/app/api/translate/route";
 
 const TranslateSection = () => {
   const [languageTo, setLanguageTo] = useState(languages[0]);
@@ -151,6 +151,7 @@ const TranslateSection = () => {
             <TextArea
               disabled={false}
               value={inputText}
+              placeHolderText="Enter text here"
               onChange={handleInputChange}
             />
           </motion.div>
