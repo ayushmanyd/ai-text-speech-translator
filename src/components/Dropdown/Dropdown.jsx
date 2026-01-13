@@ -33,7 +33,7 @@ const Dropdown = ({ name, value, onChange, options }) => {
 
   return (
     <main className="flex flex-col items-center justify-center">
-      <div className="relative inline-block w-full md:w-3/5" ref={dropdownRef}>
+      <div className="relative inline-block w-full xl:w-3/5" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-between w-full px-3 py-2 text-base bg-background text-foreground border border-input hover:bg-accent hover:text-accent-foreground rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
