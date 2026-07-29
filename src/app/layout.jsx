@@ -1,17 +1,17 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Google_Sans, Google_Sans_Code } from "next/font/google";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import Navbar from "@/components/Navbar/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const googleSans = Google_Sans({
+  variable: "--font-google-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const googleSansCode = Google_Sans_Code({
+  variable: "--font-google-sans-code",
   subsets: ["latin"],
 });
 
@@ -30,7 +30,7 @@ export default function RootLayout({ children }) {
     >
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased dark`}
+          className={`${googleSans.className} ${googleSansCode.variable} antialiased dark`}
         >
           <Navbar />
           {children}

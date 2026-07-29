@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: Geist, Inter, Helvetica, sans-serif;
+  font-family: "Google Sans", Geist, Inter, Helvetica, sans-serif;
   background-color: black;
 }
 
