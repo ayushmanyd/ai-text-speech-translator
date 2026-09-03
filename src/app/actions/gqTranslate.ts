@@ -2,13 +2,16 @@
 
 import Groq from "groq-sdk";
 
-const GROQ_API_KEYS = [
+const GROQ_API_KEYS: string[] = [
   process.env.TRANSLATE_GROQ_API_KEY1,
   process.env.TRANSLATE_GROQ_API_KEY2,
   process.env.TRANSLATE_GROQ_API_KEY3,
-].filter(Boolean);
+].filter((key): key is string => Boolean(key));
 
-export default async function translateText(inputText, targetLanguage) {
+export default async function translateText(
+  inputText: string,
+  targetLanguage: string
+): Promise<string> {
   const prompt = `Translate the text into ${targetLanguage}: ${inputText}.
   Only return the translated text. Do not add additional descriptions.'`;
 
@@ -32,17 +35,21 @@ export default async function translateText(inputText, targetLanguage) {
         ],
       });
 
-      console.log(response);
-      console.log(response.choices[0]?.message);
-
       // Success → return translation
-      return response.choices[0]?.message?.content?.trim();
-    } catch (error) {
+      const content = response.choices[0]?.message?.content;
+      return content?.trim() ?? "Couldn't load translations.";
+    } catch (error: unknown) {
+      const err = error as {
+        status?: number;
+        message?: string;
+        response?: { status?: number };
+        error?: { status?: number };
+      };
       const status =
-        error?.status || error?.response?.status || error?.error?.status;
+        err?.status || err?.response?.status || err?.error?.status;
 
       console.error(`Groq API key ${i + 1} failed`, "Status:", status);
-      console.error("Error message:", error?.message);
+      console.error("Error message:", err?.message);
       console.error("Error object:", error);
 
       // If this was the last key, return fallback

@@ -4,15 +4,19 @@ import { auth } from "@clerk/nextjs/server";
 import { neon } from "@neondatabase/serverless";
 
 export default async function saveTranslations(
-  targetLanguage,
-  sourceText,
-  translatedText
-) {
-  const { userId, redirectToSignIn } = await auth();
+  targetLanguage: string,
+  sourceText: string,
+  translatedText: string
+): Promise<void> {
+  const { userId } = await auth.protect();
 
-  if (!userId) return redirectToSignIn();
-  const sql = neon(process.env.DATABASE_URL);
-  const response = await sql`
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL is not defined in environment variables");
+  }
+
+  const sql = neon(databaseUrl);
+  await sql`
   INSERT INTO translations (
     userID,
     targetLanguage,
@@ -24,5 +28,4 @@ export default async function saveTranslations(
         ${sourceText},
         ${translatedText}
     )`;
-  // console.log(response);
 }

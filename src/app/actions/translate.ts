@@ -1,9 +1,14 @@
 "use server";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GEN_AI_API_KEY);
 
-async function translateText(inputText, targetLanguage) {
+const apiKey = process.env.GOOGLE_GEN_AI_API_KEY || "";
+const genAI = new GoogleGenerativeAI(apiKey);
+
+async function translateText(
+  inputText: string,
+  targetLanguage: string
+): Promise<string> {
   const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
   const prompt = `Detect the language of the text and translate it into ${targetLanguage}: ${inputText}`;
   const additionalPrompt =
@@ -11,14 +16,16 @@ async function translateText(inputText, targetLanguage) {
 
   try {
     const result = await model.generateContent(prompt + additionalPrompt);
-    // console.log(result.response.text());
     return result.response.text();
   } catch (e) {
-    console.log(e);
+    console.error("Gemini translation error:", e);
   }
   return "Couldn't load translations.";
 }
 
-export async function translate(inputText, targetLanguage) {
+export async function translate(
+  inputText: string,
+  targetLanguage: string
+): Promise<string> {
   return translateText(inputText, targetLanguage);
 }
