@@ -1,4 +1,6 @@
-export default function About() {
+import React from "react";
+
+export default function About(): React.JSX.Element {
   return (
     <main className="my-6">
       <div className="max-w-5xl mx-auto bg-[#09090b] px-4 pb-8 flex flex-col border-2 border-white/20 rounded-xl shadow-lg">
@@ -18,7 +20,7 @@ export default function About() {
             <p className="mt-4 leading-relaxed">
               Our mission is to empower people around the globe by eliminating
               language barriers through cutting-edge AI translation technology.
-              In today's interconnected world, effective communication is
+              In today&apos;s interconnected world, effective communication is
               essential for personal and professional growth. Our platform
               offers real-time text and speech translation, making it easier for
               individuals, businesses, and travelers to communicate effortlessly
@@ -41,7 +43,7 @@ export default function About() {
             </h2>
             <p className="mt-4 leading-relaxed">
               Our AI-powered translator offers a seamless experience with
-              advanced features tailored for real-world applications. Here's why
+              advanced features tailored for real-world applications. Here&apos;s why
               you should choose us:
             </p>
             <ul className="list-disc list-inside mt-4 leading-relaxed">

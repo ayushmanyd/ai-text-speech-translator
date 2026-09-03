@@ -1,9 +1,15 @@
+import React from "react";
 import { neon } from "@neondatabase/serverless";
 import { auth } from "@clerk/nextjs/server";
 import TranslationsCard from "@/components/Card/TranslationCard";
+import type { TranslationGroup } from "@/types";
 
-async function getData(userId) {
-  const sql = neon(process.env.DATABASE_URL);
+async function getData(userId: string): Promise<TranslationGroup[]> {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    return [];
+  }
+  const sql = neon(databaseUrl);
   const response = await sql`
   SELECT 
   targetLanguage,
@@ -14,13 +20,12 @@ async function getData(userId) {
   WHERE userID = ${userId}
   GROUP BY targetLanguage;
   `;
-  return response;
+  return response as unknown as TranslationGroup[];
 }
 
-export default async function Translations() {
-  const { userId } = await auth();
-  const data = await getData(userId);
-  // console.log(data);
+export default async function Translations(): Promise<React.JSX.Element> {
+  const { userId } = await auth.protect();
+  const data: TranslationGroup[] = await getData(userId);
 
   return (
     <>

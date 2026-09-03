@@ -1,4 +1,6 @@
-export default function TermsOfService() {
+import React from "react";
+
+export default function TermsOfService(): React.JSX.Element {
   return (
     <main className="my-6 mb-10">
       <div className="max-w-5xl mx-auto bg-[#09090b] px-12 py-8 pb-10 flex flex-col items-center justify-center border-2 border-white/20 rounded-xl shadow-lg">

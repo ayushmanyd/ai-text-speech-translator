@@ -1,4 +1,6 @@
-export default function Contact() {
+import React from "react";
+
+export default function Contact(): React.JSX.Element {
   return (
     <main className="my-6 px-4">
       <div className="max-w-5xl mx-auto bg-[#09090b] px-6 sm:px-12 py-8 pb-10 flex flex-col border-2 border-white/20 rounded-xl shadow-lg">

@@ -1,4 +1,6 @@
-export default function Report() {
+import React from "react";
+
+export default function Report(): React.JSX.Element {
   return (
     <main className="my-6">
       <div className="max-w-5xl mx-auto h-screen bg-[#09090b] px-4 pb-8 flex flex-col border-2 border-white/20 rounded-xl shadow-lg">
