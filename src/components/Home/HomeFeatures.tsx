@@ -10,14 +10,21 @@ import {
   MonitorSmartphone,
   RefreshCcw,
 } from "lucide-react";
+import type { FeatureItem } from "@/types";
+import {
+  fadeInUp,
+  staggerContainer,
+  cardHover,
+  viewportOnce,
+} from "./animationVariants";
 
-const features = [
+const features: FeatureItem[] = [
   {
     icon: <Rocket size={44} color="white" className="hover:brightness-90" />,
     iconClass: "bg-[#673AB7]",
     title: "AI Auto Language & Speech Detection",
     description:
-      "Effortlessly translate spoken or written content with advanced AI detection. No need to manually select the language—our system automatically identifies it.",
+      "Effortlessly translate spoken or written content with advanced AI detection. No need to manually select the language - our system automatically identifies it.",
   },
   {
     icon: <Languages size={44} color="white" className="hover:brightness-90" />,
@@ -66,27 +73,13 @@ const features = [
   },
 ];
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-export default function Features() {
+export default function Features(): React.JSX.Element {
   return (
     <motion.main
       className="mt-12 py-16 border-t"
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, amount: 0.3 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
       variants={staggerContainer}
     >
       <motion.h2
@@ -100,15 +93,14 @@ export default function Features() {
         {features.map((feature, index) => (
           <motion.div
             key={index}
-            className="bg-black px-4 py-8 flex flex-col items-center text-center border border-input rounded-xl shadow-md"
+            className="bg-black px-4 py-8 flex flex-col items-center text-center border border-input rounded-xl shadow-md will-change-transform"
             variants={fadeInUp}
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.3 }}
+            whileHover={cardHover.whileHover}
           >
             <motion.div
               className={`w-14 h-14 p-3 border rounded-xl flex items-center justify-center ${feature.iconClass}`}
-              whileHover={{ rotate: 10 }}
-              transition={{ duration: 0.3 }}
+              whileHover={{ rotate: 8, scale: 1.08 }}
+              transition={{ type: "spring", stiffness: 300, damping: 15 }}
             >
               {feature.icon}
             </motion.div>

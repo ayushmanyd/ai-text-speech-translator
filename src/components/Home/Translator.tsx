@@ -1,59 +1,38 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import TranslateButton from "@/components/Button/TranslateButton";
 import Dropdown from "@/components/Dropdown/Dropdown";
 import TextArea from "@/components/TextArea/TextArea";
 import languages from "@/components/Dropdown/Languages";
-// import { translate } from "@/app/actions/translate";
 import AILangRecognition from "@/components/ui/AILangRecognition";
 import VoiceRecorder from "@/components/Voice/VoiceRecorder";
-import { CircleCheck, Copy } from "lucide-react";
+import { CircleCheck } from "lucide-react";
 import CopyButton from "@/components/Button/CopyButton";
 import SaveButton from "@/components/Button/SaveButton";
 import { motion } from "framer-motion";
-import translate from "@/app/api/translate/route";
+import translate from "@/app/actions/gqTranslate";
+import type { Language } from "@/types";
+import { fadeInUp, staggerContainer, viewportOnce } from "./animationVariants";
 
-const TranslateSection = () => {
-  const [languageTo, setLanguageTo] = useState(languages[0]);
-  const [inputText, setInputText] = useState("");
-  const [translatedText, setTranslatedText] = useState("");
-  const [isSpeechInput, setIsSpeechInput] = useState(false);
-  const [status, setStatus] = useState("");
-  const [isSaved, setIsSaved] = useState(false);
+const TranslateSection: React.FC = () => {
+  const [languageTo, setLanguageTo] = useState<Language>(languages[0]);
+  const [inputText, setInputText] = useState<string>("");
+  const [translatedText, setTranslatedText] = useState<string>("");
+  const [isSpeechInput, setIsSpeechInput] = useState<boolean>(false);
+  const [status, setStatus] = useState<string>("");
+  const [isSaved, setIsSaved] = useState<boolean>(false);
 
   useEffect(() => {
-    const cachedData = localStorage.getItem("translations");
-    if (!cachedData) {
-      localStorage.setItem("translations", JSON.stringify({}));
+    if (typeof window !== "undefined") {
+      const cachedData = localStorage.getItem("translations");
+      if (!cachedData) {
+        localStorage.setItem("translations", JSON.stringify({}));
+      }
     }
   }, []);
 
-  useEffect(() => {
-    if (isSpeechInput && inputText.trim()) {
-      handleTranslation();
-    }
-  }, [inputText]);
-
-  const onSave = () => {
-    setIsSaved(true);
-  };
-
-  const handleInputChange = (e) => {
-    setIsSpeechInput(false);
-    setInputText(e.target.value);
-  };
-
-  const handleInputSet = (event) => {
-    setIsSpeechInput(true);
-    setInputText(event);
-  };
-
-  const handleLanguageToChange = (value) => {
-    setLanguageTo(value);
-  };
-
-  const handleTranslation = async () => {
+  const handleTranslation = useCallback(async () => {
     if (!inputText.trim()) {
       alert("Please enter text to translate.");
       return;
@@ -61,11 +40,20 @@ const TranslateSection = () => {
 
     setStatus("Translating");
     const cacheKey = `${inputText}_${languageTo.langCode}`;
-    const cachedTranslations =
-      JSON.parse(localStorage.getItem("translations")) || {};
+    let cachedTranslations: Record<string, string> = {};
+
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("translations");
+        if (stored) {
+          cachedTranslations = JSON.parse(stored);
+        }
+      } catch (e) {
+        console.error("Error reading from localStorage:", e);
+      }
+    }
 
     if (cachedTranslations[cacheKey]) {
-      // console.log("Fetching from cache:", cachedTranslations[cacheKey]);
       setTranslatedText(cachedTranslations[cacheKey]);
       setStatus("Translated");
       if (isSaved) {
@@ -74,11 +62,8 @@ const TranslateSection = () => {
       return;
     }
 
-    // console.log("Calling API for:", inputText, languageTo.langCode);
-
     try {
       const result = await translate(inputText, languageTo.langCode);
-      // console.log("Translation result:", result);
       setTranslatedText(result);
       setStatus("Translated");
       if (isSaved) {
@@ -92,33 +77,50 @@ const TranslateSection = () => {
         return;
       }
       cachedTranslations[cacheKey] = result;
-      localStorage.setItem("translations", JSON.stringify(cachedTranslations));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("translations", JSON.stringify(cachedTranslations));
+      }
     } catch (error) {
       console.error("Translation failed:", error);
       setTranslatedText("Error in translation.");
     }
+  }, [inputText, languageTo.langCode, isSaved]);
+
+  useEffect(() => {
+    if (isSpeechInput && inputText.trim()) {
+      handleTranslation();
+    }
+  }, [inputText, isSpeechInput, handleTranslation]);
+
+  const onSave = () => {
+    setIsSaved(true);
   };
 
-  const fadeInUp = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.5 }
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setIsSpeechInput(false);
+    setInputText(e.target.value);
   };
-  
-  const staggerContainer = {
-    animate: {
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
+
+  const handleInputSet = (text: string) => {
+    setIsSpeechInput(true);
+    setInputText(text);
+  };
+
+  const handleResetInput = () => {
+    setInputText("");
+    setIsSpeechInput(false);
+  };
+
+  const handleLanguageToChange = (value: Language) => {
+    setLanguageTo(value);
   };
 
   return (
     <motion.main
       className="mt-8"
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, amount: 0.3 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
       variants={staggerContainer}
     >
       <motion.div
@@ -145,7 +147,10 @@ const TranslateSection = () => {
             className="mx-auto py-1 w-full h-auto text-foreground"
             variants={fadeInUp}
           >
-            <VoiceRecorder handleSetText={handleInputSet} />
+            <VoiceRecorder
+              handleSetText={handleInputSet}
+              handleReset={handleResetInput}
+            />
           </motion.div>
           <motion.div variants={fadeInUp}>
             <TextArea
@@ -205,7 +210,6 @@ const TranslateSection = () => {
         </motion.div>
       </motion.div>
     </motion.main>
-
   );
 };
 

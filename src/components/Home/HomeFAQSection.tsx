@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
+import type { FAQItem } from "@/types";
+import { fadeInUp, staggerContainer, viewportOnce, EASE_OUT } from "./animationVariants";
 
-const faqs = [
+const faqs: FAQItem[] = [
   {
     question: "Is this translation 100% accurate?",
     answer:
@@ -27,33 +29,19 @@ const faqs = [
   },
 ];
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
+export default function FAQSection(): React.JSX.Element {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-export default function FAQSection() {
-  const [openIndex, setOpenIndex] = useState(null);
-
-  const toggleFAQ = (index) => {
+  const toggleFAQ = (index: number) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
     <motion.section
-      className="py-16 bg-black text-white rounded-xl transition-all duration-200"
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, amount: 0.3 }}
+      className="py-16 bg-black text-white rounded-xl"
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
       variants={staggerContainer}
     >
       <div className="max-w-4xl mx-auto px-6">
@@ -69,25 +57,39 @@ export default function FAQSection() {
           {faqs.map((faq, index) => (
             <motion.div
               key={index}
-              className="bg-accent rounded-lg shadow-lg p-4 text-left transition-all duration-200"
+              className="bg-accent rounded-lg shadow-lg p-4 text-left overflow-hidden"
               variants={fadeInUp}
             >
               <button
+                type="button"
                 className="w-full flex justify-between items-center text-lg font-semibold text-white text-start"
                 onClick={() => toggleFAQ(index)}
+                aria-expanded={openIndex === index}
               >
                 {faq.question}
-                {openIndex === index ? (
-                  <ChevronUp className="w-5 h-5" />
-                ) : (
+                <motion.span
+                  className="flex-shrink-0 ml-2"
+                  animate={{ rotate: openIndex === index ? 180 : 0 }}
+                  transition={{ duration: 0.35, ease: EASE_OUT }}
+                >
                   <ChevronDown className="w-5 h-5" />
-                )}
+                </motion.span>
               </button>
-              {openIndex === index && (
-                <p className="my-2 md:pr-4 text-gray-300 text-base">
-                  {faq.answer}
-                </p>
-              )}
+              <AnimatePresence initial={false}>
+                {openIndex === index && (
+                  <motion.div
+                    key="answer"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.4, ease: EASE_OUT }}
+                  >
+                    <p className="pt-2 md:pr-4 text-gray-300 text-base overflow-hidden">
+                      {faq.answer}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           ))}
         </div>

@@ -1,9 +1,17 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
-import { Languages, Mic, MousePointerClick, Copy, Volume2 } from "lucide-react";
+import { Languages, Mic, MousePointerClick, Copy } from "lucide-react";
+import type { StepItem } from "@/types";
+import {
+  fadeInUp,
+  staggerContainer,
+  cardHover,
+  viewportOnce,
+} from "./animationVariants";
 
-const steps = [
+const steps: StepItem[] = [
   {
     icon: <Languages className="w-8 h-8 text-primary" />,
     title: "Select Your Language",
@@ -26,27 +34,13 @@ const steps = [
   },
 ];
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.2,
-    },
-  },
-};
-
-export default function HowItWorks() {
+export default function HowItWorks(): React.JSX.Element {
   return (
     <motion.section
       className="py-16 bg-black text-white text-center rounded-xl"
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, amount: 0.3 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
       variants={staggerContainer}
     >
       <div className="max-w-5xl mx-auto px-6">
@@ -61,13 +55,14 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <motion.div
               key={index}
-              className="flex flex-col items-center p-6 bg-gray-800 rounded-xl shadow-lg"
+              className="flex flex-col items-center p-6 bg-gray-800 rounded-xl shadow-lg will-change-transform"
               variants={fadeInUp}
+              whileHover={cardHover.whileHover}
             >
               <motion.div
                 className="p-4 bg-gray-700 rounded-full mb-4"
                 whileHover={{ scale: 1.1 }}
-                transition={{ duration: 0.3 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
               >
                 {step.icon}
               </motion.div>

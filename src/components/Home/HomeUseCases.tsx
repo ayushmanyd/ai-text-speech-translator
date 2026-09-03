@@ -1,9 +1,17 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import { User, UserCheck, Briefcase, Globe } from "lucide-react";
+import type { UseCaseItem } from "@/types";
+import {
+  fadeInUp,
+  staggerContainer,
+  cardHover,
+  viewportOnce,
+} from "./animationVariants";
 
-const useCases = [
+const useCases: UseCaseItem[] = [
   {
     icon: <User size={36} className="text-4xl text-blue-500" />,
     title: "Travelers",
@@ -30,27 +38,13 @@ const useCases = [
   },
 ];
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 },
-};
-
-const staggerContainer = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
-
-export default function UseCases() {
+export default function UseCases(): React.JSX.Element {
   return (
     <motion.section
       className="my-4 py-16 bg-black text-white text-center rounded-xl"
-      initial="initial"
-      whileInView="animate"
-      viewport={{ once: true, amount: 0.4 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={viewportOnce}
       variants={staggerContainer}
     >
       <div className="max-w-6xl mx-auto px-6">
@@ -65,8 +59,9 @@ export default function UseCases() {
           {useCases.map((useCase, index) => (
             <motion.div
               key={index}
-              className="p-12 bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-pink-500/20 rounded-xl shadow-lg flex flex-col items-center text-center"
+              className="p-12 bg-gradient-to-br from-indigo-500/20 via-purple-500/10 to-pink-500/20 rounded-xl shadow-lg flex flex-col items-center text-center will-change-transform"
               variants={fadeInUp}
+              whileHover={cardHover.whileHover}
             >
               <div className="mb-4 w-14 h-14 p-3 border-2 border-accent rounded-xl flex items-center justify-center">
                 {useCase.icon}
