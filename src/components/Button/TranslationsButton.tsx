@@ -1,10 +1,11 @@
 "use client";
 
+import React from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Plus } from "lucide-react";
 
-export default function TranslationsButton() {
+export default function TranslationsButton(): React.JSX.Element {
   const pathname = usePathname();
 
   if (pathname === "/translations") {
@@ -23,7 +24,7 @@ export default function TranslationsButton() {
   return (
     <div className="hidden md:flex">
       <Link
-        href="translations"
+        href="/translations"
         className="px-3 py-2 flex items-center justify-center gap-1 text-base font-medium text-gray-400 hover:text-white border border-accent rounded-md hover:border hover:border-[#ff0080] transition-colors duration-100"
       >
         Translations

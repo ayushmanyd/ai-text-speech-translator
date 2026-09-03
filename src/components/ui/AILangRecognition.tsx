@@ -2,7 +2,7 @@ import React from "react";
 import { CircleCheck, ScanText, ToggleRight } from "lucide-react";
 import ToolTip from "./ToolTip";
 
-const AILangRecognition = () => {
+const AILangRecognition: React.FC = () => {
   return (
     <main className="flex flex-col items-center justify-center">
       <div className="relative inline-block w-full xl:w-3/5">

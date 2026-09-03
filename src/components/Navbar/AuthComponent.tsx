@@ -1,24 +1,22 @@
+import React from "react";
 import {
   SignInButton,
-  SignUpButton,
-  SignedIn,
-  SignedOut,
+  Show,
   UserButton,
 } from "@clerk/nextjs";
 
-export default function AuthComponent() {
+export default function AuthComponent(): React.JSX.Element {
   return (
     <div className="flex justify-center items-center">
-      <SignedOut>
+      <Show when="signed-out">
         <div className="px-4 py-1 text-base font-medium border-2 border-[#ff0080] hover:bg-[#ff0080] rounded-md">
           <SignInButton />
         </div>
-        {/* <SignUpButton /> */}
-      </SignedOut>
+      </Show>
       <div className="flex justify-center items-center h-16">
-        <SignedIn>
+        <Show when="signed-in">
           <UserButton />
-        </SignedIn>
+        </Show>
       </div>
     </div>
   );

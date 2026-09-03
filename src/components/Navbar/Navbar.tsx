@@ -1,3 +1,4 @@
+import React from "react";
 import Link from "next/link";
 import MobileNavbar from "./MobileNavbar";
 import Image from "next/image";
@@ -5,7 +6,7 @@ import navMenu from "./NavMenu";
 import TranslationsButton from "@/components/Button/TranslationsButton";
 import AuthComponent from "./AuthComponent";
 
-const Navbar = () => {
+const Navbar: React.FC = () => {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-slate-600 bg-[#131316]/80 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-screen-xl items-center justify-between px-4 sm:px-6 lg:px-8">

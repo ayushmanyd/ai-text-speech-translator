@@ -2,15 +2,31 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Search, Check, ChevronDown, Globe } from "lucide-react";
+import type { Language } from "@/types";
 
-const Dropdown = ({ name, value, onChange, options }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const dropdownRef = useRef(null);
+interface DropdownProps {
+  name?: string;
+  value: Language;
+  onChange: (language: Language) => void;
+  options: Language[];
+}
+
+const Dropdown: React.FC<DropdownProps> = ({
+  name,
+  value,
+  onChange,
+  options,
+}) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const dropdownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -21,7 +37,7 @@ const Dropdown = ({ name, value, onChange, options }) => {
     };
   }, []);
 
-  const handleLanguageChange = (language) => {
+  const handleLanguageChange = (language: Language) => {
     onChange(language);
     setIsOpen(false);
     setSearchTerm("");
@@ -35,6 +51,7 @@ const Dropdown = ({ name, value, onChange, options }) => {
     <main className="flex flex-col items-center justify-center">
       <div className="relative inline-block w-full xl:w-3/5" ref={dropdownRef}>
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-between w-full px-3 py-2 text-base bg-background text-foreground border border-input hover:bg-accent hover:text-accent-foreground rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1"
         >
@@ -52,13 +69,17 @@ const Dropdown = ({ name, value, onChange, options }) => {
                 <Search className="w-4 h-4 mr-2 text-muted-foreground" />
                 <input
                   type="text"
+                  name={name}
                   className="w-full bg-transparent text-base placeholder:text-muted-foreground focus:outline-none"
                   placeholder="Search language..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </div>
-              <ul className="py-1 overflow-auto max-h-60" role="listbox">
+              <ul
+                className="py-1 pr-1 overflow-auto max-h-60 dropdown-scrollbar"
+                role="listbox"
+              >
                 {filteredLanguages.length === 0 ? (
                   <li className="px-2 py-1.5 text-base text-muted-foreground">
                     No language found.
@@ -67,7 +88,7 @@ const Dropdown = ({ name, value, onChange, options }) => {
                   filteredLanguages.map((language) => (
                     <li
                       key={language.langCode}
-                      className="flex items-center px-2 py-1.5 text-base cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                      className="flex items-center px-2 py-1.5 text-base cursor-pointer hover:bg-accent hover:text-accent-foreground rounded-sm transition-colors"
                       onClick={() => handleLanguageChange(language)}
                     >
                       <span className="flex items-center w-full">

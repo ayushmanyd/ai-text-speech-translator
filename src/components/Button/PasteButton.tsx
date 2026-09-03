@@ -1,6 +1,6 @@
 import React from "react";
 
-const PasteButton = () => {
+const PasteButton: React.FC = () => {
   return <div>PasteButton</div>;
 };
 

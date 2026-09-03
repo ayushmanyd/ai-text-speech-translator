@@ -1,18 +1,20 @@
 "use client";
 
+import React from "react";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import navMenu from "../Navbar/NavMenu";
+import type { NavItem } from "@/types";
 
-const footerMenu = [
+const footerMenu: NavItem[] = [
   { name: "Privacy Policy", slug: "/privacy-policy" },
   // { name: "Demo", slug: "/" },
   { name: "Terms of Service", slug: "/terms-of-service" },
   { name: "Contact Us", slug: "/contact" },
 ];
 
-export default function Footer() {
+export default function Footer(): React.JSX.Element {
   return (
     <section>
       <footer className="text-white py-8 bg-[#131316]/80 backdrop-blur-sm">
@@ -81,14 +83,14 @@ export default function Footer() {
           <div className="flex flex-col text-center md:text-end">
             <h3 className="text-xl font-semibold mb-4">Legal</h3>
             <ul className="space-y-2">
-              {footerMenu.map((footerMenu) => (
-                <li key={footerMenu.name}>
+              {footerMenu.map((item) => (
+                <li key={item.name}>
                   <Link
-                    href={footerMenu.slug}
+                    href={item.slug}
                     className="text-base font-medium text-gray-400 hover:text-white"
                   >
                     <span className="border-b-2 border-transparent hover:border-b-2 hover:border-[#ff0080] transition-colors duration-100">
-                      {footerMenu.name}
+                      {item.name}
                     </span>
                   </Link>
                 </li>

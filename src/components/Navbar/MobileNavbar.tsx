@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, ChevronRight, Search, Github, Languages } from "lucide-react";
+import { Menu, X, ChevronRight, Languages } from "lucide-react";
 import Image from "next/image";
-import NavMenu from "./NavMenu";
+import navMenu from "./NavMenu";
 
-const MobileNavbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const MobileNavbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const toggleMenu = () => setIsOpen(!isOpen);
+  const toggleMenu = () => setIsOpen((prev) => !prev);
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,7 +32,7 @@ const MobileNavbar = () => {
 
   return (
     <>
-      <button className="md:hidden" onClick={toggleMenu}>
+      <button type="button" className="md:hidden" onClick={toggleMenu}>
         <Menu className="h-6 w-6" />
         <span className="sr-only">Toggle menu</span>
       </button>
@@ -43,7 +43,7 @@ const MobileNavbar = () => {
         >
           <div
             className="absolute right-0 top-0 h-screen w-screen bg-black shadow-lg"
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
           >
             <nav className="flex flex-col h-full">
               <div className="h-16 flex items-center justify-between px-4 backdrop-blur-sm border-b border-slate-600 bg-[#131316]/80">
@@ -61,14 +61,14 @@ const MobileNavbar = () => {
                     priority
                   />
                 </Link>
-                <button onClick={toggleMenu} className="p-1">
+                <button type="button" onClick={toggleMenu} className="p-1">
                   <X className="h-6 w-6" />
                   <span className="sr-only">Close menu</span>
                 </button>
               </div>
               <div className="flex-grow overflow-y-auto rounded-2xl">
                 <div className="p-5">
-                  {NavMenu.map((item) => (
+                  {navMenu.map((item) => (
                     <Link
                       key={item.name}
                       href={item.slug}
@@ -81,7 +81,7 @@ const MobileNavbar = () => {
                   ))}
                   <div className="mx-2 my-5 p-4 border-2 border-[#ff0080] rounded-xl">
                     <Link
-                      href="translations"
+                      href="/translations"
                       onClick={toggleMenu}
                       className="text-xl font-medium text-white flex items-center justify-center gap-2"
                     >

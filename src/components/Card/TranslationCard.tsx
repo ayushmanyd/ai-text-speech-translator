@@ -1,11 +1,17 @@
+import React from "react";
 import languages from "@/components/Dropdown/Languages";
+import type { TranslationGroup } from "@/types";
 
-function getLangName(langCode) {
+interface TranslationsCardProps {
+  item: TranslationGroup;
+}
+
+function getLangName(langCode: string): string {
   const language = languages.find((lang) => lang.langCode === langCode);
   return language ? language.langName : langCode;
 }
 
-export default function TranslationsCard({ item }) {
+export default function TranslationsCard({ item }: TranslationsCardProps): React.JSX.Element {
   return (
     <main className="bg-black h-full border-2 border-accent rounded-lg p-4">
       <div>
@@ -18,7 +24,7 @@ export default function TranslationsCard({ item }) {
         </h4>
       </div>
       <div className="p-4 text-base flex-grow space-y-4">
-        {item.sourcetexts.map((sourceText, index) => (
+        {item.sourcetexts.map((sourceText: string, index: number) => (
           <div key={`${item.targetlanguage}_${index}`} className="mb-2 pb-4 border-b-2 border-accent last:border-b-0">
             <div>
               <h3 className="text-base text-center font-semibold text-white/60">

@@ -1,4 +1,6 @@
-const languages = [
+import type { Language } from "@/types";
+
+const languages: Language[] = [
   { langCode: "hi", langName: "Hindi (हिन्दी)" },
   { langCode: "en", langName: "English" },
   { langCode: "pa", langName: "Punjabi (ਪੰਜਾਬੀ)" },

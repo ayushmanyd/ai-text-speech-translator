@@ -1,9 +1,17 @@
 "use client";
 
+import React, { useState } from "react";
 import { Save } from "lucide-react";
 import saveTranslations from "@/app/actions/saveTranslations";
 import ToolTip from "../ui/ToolTip";
-import { useState } from "react";
+
+interface SaveButtonProps {
+  targetLanguage: string;
+  sourceText: string;
+  translatedText: string;
+  onHandleSave: () => void;
+  isSaved: boolean;
+}
 
 export default function SaveButton({
   targetLanguage,
@@ -11,19 +19,15 @@ export default function SaveButton({
   translatedText,
   onHandleSave,
   isSaved,
-}) {
+}: SaveButtonProps) {
   const buttonClass = isSaved ? "text-green-600 " : "";
-  const [saveText, setSaveText] = useState("Save");
-  // Check if either sourceText or translatedText is empty
+  const [saveText, setSaveText] = useState<string>("Save");
   const isDisabled = !sourceText.trim() || !translatedText.trim() || isSaved;
 
   const handleSaveClick = async () => {
     if (isDisabled) return;
-
-    // Prevent saving if already saved
     if (isSaved) return;
 
-    // Perform save action
     await saveTranslations(targetLanguage, sourceText, translatedText);
     setSaveText("Saved");
     onHandleSave();

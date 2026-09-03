@@ -1,9 +1,20 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import type { TooltipPosition } from "@/types";
 
-const ToolTip = ({ children, content, position = "top" }) => {
-  const [isVisible, setIsVisible] = useState(false);
+interface ToolTipProps {
+  children: React.ReactNode;
+  content: React.ReactNode;
+  position?: TooltipPosition;
+}
 
-  const positionClasses = {
+const ToolTip: React.FC<ToolTipProps> = ({
+  children,
+  content,
+  position = "top",
+}) => {
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
+  const positionClasses: Record<TooltipPosition, string> = {
     top: "bottom-full left-1/2 transform -translate-x-1/2 mb-2",
     bottom: "top-full left-1/2 transform -translate-x-1/2 mt-2",
     left: "right-full top-1/2 transform -translate-y-1/2 mr-2",
