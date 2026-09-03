@@ -173,9 +173,10 @@ h6 {
 }
 
 .animateRight {
-  animation: appearRight ease-in-out;
+  animation: appearRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-timeline: view();
   animation-range: entry 0% cover 40%;
+  will-change: transform, opacity;
 }
 
 @keyframes appearLeft {
@@ -190,9 +191,10 @@ h6 {
 }
 
 .animateLeft {
-  animation: appearLeft ease-in-out;
+  animation: appearLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-timeline: view();
   animation-range: entry 0% cover 40%;
+  will-change: transform, opacity;
 }
 
 @keyframes scaleUp {
@@ -207,7 +209,65 @@ h6 {
 }
 
 .animateScale {
-  animation: scaleUp 1s ease-in-out;
+  animation: scaleUp 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   animation-timeline: view();
   animation-range: entry 0% cover 40%;
+  will-change: transform, opacity;
 }
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #ff0080;
+}
+
+/* Dropdown specific scrollbar */
+.dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 4px 0;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 9999px;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #ff0080;
+}
+
